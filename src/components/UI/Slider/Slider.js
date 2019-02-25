@@ -6,6 +6,7 @@ import classes from './Slider.module.css';
 import SlideContainer from './SlideContainer/SlideContainer';
 import SliderButtons from './SliderButtons/SliderButtons';
 import SliderNav from './SliderNav/SliderNav';
+import SliderProgress from './SliderProgress/SliderProgress';
 
 class Slider extends Component {
     constructor(props) {
@@ -105,12 +106,28 @@ class Slider extends Component {
             PrevButton = this.props.buttons.prev;
             NextButton = this.props.buttons.next;
         }
+        // Protection against crashes
+        if (!this.props.children) { return <SlideContainer style={this.state.style}>{this.props.children}</SlideContainer>; }
         const children = (
             this.props.children.length ? 
-                Object.keys(this.props.children).map( children => {
+                Object.keys(this.props.children).map((children, index) => {
                     return (
-                        <SlideContainer key={children} style={this.state.style}>
-                            {this.props.children[children]}
+                        <SlideContainer key={index}
+                            showOnlyActive={this.props.showOnlyActive ? 
+                                this.state.activeSlide === index ? 
+                                    'show'
+                                    : 'hide'
+                                : null
+                            }  
+                            renderOnlyActive={this.props.renderOnlyActive}  
+                            style={this.state.style}>
+                            {/* Only render the current slide if it's active. Otherwise return render null. */}
+                            {this.props.renderOnlyActive ? 
+                                this.state.activeSlide === index ? 
+                                    this.props.children[children]
+                                    : null
+                                : this.props.children[children]}
+                            
                             {this.props.buttons ?
                                 <div className={this.props.buttons.className}>
                                     {React.cloneElement( // Cloning buttons to pass onTranslateHandler
@@ -146,8 +163,13 @@ class Slider extends Component {
                 </SlideContainer>
         );
         const wrapperClasses = [classes.Wrapper];
+        // If fade in is desired:
         if (this.props.fadeIn) {
             wrapperClasses.push(classes.FadeIn);
+        }
+        // If sticky in is desired:
+        if (this.props.sticky) {
+            wrapperClasses.push(classes.Sticky);
         }
         return (
             <div ref={this.mySlider} className={wrapperClasses.join(' ')} style={this.props.style}>
@@ -161,10 +183,17 @@ class Slider extends Component {
                         onClick={this.onTranslateHandler} />}
                 {this.props.disableNav || !this.props.children.length ? 
                     null :
-                    <SliderNav
-                        activeSlide={this.state.activeSlide}
-                        slides={Object.keys(this.props.children)} 
-                        onClick={this.onTranslateHandler} />}
+                    this.props.children.length > 0 ?
+                        <SliderNav
+                            activeSlide={this.state.activeSlide}
+                            slides={Object.keys(this.props.children)} 
+                            onClick={this.onTranslateHandler} />
+                        : null}
+                {!this.props.progressBar ? 
+                    null :
+                    <SliderProgress
+                        totalSlides={this.props.children.length}
+                        activeSlide={this.state.activeSlide} />}
             </div>
         );
     }

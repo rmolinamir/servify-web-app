@@ -2,9 +2,11 @@ import React from 'react';
 import geo from 'mapbox-geocoding';
 // CSS
 import classes from './Map.module.css';
-// JSX
+// Toast
 import { toast } from 'react-toastify';
-import ReactMapboxGl, { Layer, Feature, Marker , ZoomControl, ScaleControl, Popup } from "react-mapbox-gl";
+import 'react-toastify/dist/ReactToastify.css';
+// JSX
+import ReactMapboxGl, { Layer, Feature, Marker , ZoomControl, ScaleControl } from "react-mapbox-gl";
 import SVG from '../../SVG/SVG';
 
 const mapboxPKey = "pk.eyJ1Ijoicm9iZXJ0MDMxMCIsImEiOiJjanFpZjNmZnMwZzFqNDJyMGdmaTJwYWtpIn0.bUv0BRK5nRmmYMp61buDUg";
@@ -87,8 +89,9 @@ const map = (props) => {
             return t;
         }
     }
+    const styles = {map: "mapbox://styles/mapbox/streets-v9"};
     let myMap = (
-        <Map style="mapbox://styles/mapbox/streets-v9"
+        <Map style={styles.map}
             center={props.map.geoData ?
                 (
                     props.map.geoData.features.length ?
@@ -104,7 +107,7 @@ const map = (props) => {
             flyToOptions={flyToSettings}>
             {props.map.geoData ?
                 (
-                props.map.geoData.features.length ?
+                props.map.geoData.features.length && props.circle ?
                     <Layer
                         type="circle" 
                         id="marker" 
@@ -121,12 +124,30 @@ const map = (props) => {
                             'circle-stroke-color': '#484848',
                             'circle-stroke-opacity': 1
                         }}>
-                        <Feature
-                            coordinates={props.map.geoData ? props.map.geoData.features[0].center : props.map.initialPosition} />
+                        <Feature coordinates={props.map.geoData.features[0].center} />
                     </Layer>
                     : null
                 )
-                : null}
+                : props.map.initialPosition && props.circle ? 
+                    <Layer
+                        type="circle" 
+                        id="marker" 
+                        paint={{
+                            'circle-color': 'rgba(30,163,204, 0.1)',
+                            'circle-radius': {
+                                stops: [
+                                    [0, 0],
+                                    [20, metersToPixelsAtMaxZoom(props.map.radiusInMiles, props.map.initialPosition[1])]
+                                ],
+                                base: 2
+                            },
+                            'circle-stroke-width': 2,
+                            'circle-stroke-color': '#484848',
+                            'circle-stroke-opacity': 1
+                        }}>
+                        <Feature coordinates={props.map.initialPosition} />
+                    </Layer>
+                    : null }
             <Marker
                 coordinates={props.map.geoData ?
                 (

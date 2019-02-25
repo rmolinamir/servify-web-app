@@ -43,6 +43,12 @@ export const authActions = {
             type: actionTypes.AUTH_RESET_ERROR_MESSAGE,
         }
     },
+    authUpdateUserDetails: (userDetails) => {
+        return {
+            type: actionTypes.AUTH_UPDATE_USER_DETAILS,
+            userDetails: userDetails
+        }
+    },
 }
 
 export const authCreator = {
@@ -51,12 +57,13 @@ export const authCreator = {
             type: actionTypes.AUTH_INIT_SAGA
         }
     },
-    authSignUpInit: (email, password, bRememberMe) => {
+    authSignUpInit: (email, password, bRememberMe, displayName) => {
         return {
             type: actionTypes.AUTH_INIT_SIGN_UP,
             email: email,
             password: password,
-            bRememberMe: bRememberMe
+            bRememberMe: bRememberMe,
+            displayName: displayName
         }
     },
     authSignInInit: (email, password, bRememberMe) => {
@@ -67,16 +74,47 @@ export const authCreator = {
             bRememberMe: bRememberMe
         }
     },
-    authFacebookSignInInit: (bRememberMe) => {
+    authFacebook: {
+        signInInit: (bRememberMe) => {
+            return {
+                type: actionTypes.AUTH_INIT_FACEBOOK_SIGN_IN,
+                bRememberMe: bRememberMe
+            }
+        },
+        signUpInit: (bRememberMe) => {
+            return {
+                type: actionTypes.AUTH_INIT_FACEBOOK_SIGN_UP,
+                bRememberMe: bRememberMe
+            }
+        },
+    },
+    authGoogle: {
+        signInInit: (bRememberMe) => {
+            return {
+                type: actionTypes.AUTH_INIT_GOOGLE_SIGN_IN,
+                bRememberMe: bRememberMe
+            }
+        },
+        signUpInit: (bRememberMe) => {
+            return {
+                type: actionTypes.AUTH_INIT_GOOGLE_SIGN_UP,
+                bRememberMe: bRememberMe
+            }
+        },
+    },
+    authResetPasswordInit: (email) => {
         return {
-            type: actionTypes.AUTH_INIT_FACEBOOK_SIGN_IN,
-            bRememberMe: bRememberMe
+            type: actionTypes.AUTH_INIT_RESET_PASSWORD,
+            email: email
         }
     },
-    authGoogleSignInInit: (bRememberMe) => {
+    authSaveUserToDatabaseInit: (user, signUpProvider, bWantToMerge) => {
         return {
-            type: actionTypes.AUTH_INIT_GOOGLE_SIGN_IN,
-            bRememberMe: bRememberMe
+            type: actionTypes.AUTH_INIT_SAVE_USER_TO_DATABASE,
+            user: user,
+            signUpProvider : signUpProvider,
+            bWantToMerge: bWantToMerge
+
         }
     },
     authLogoutInit: () => {

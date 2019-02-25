@@ -41,19 +41,18 @@
 .SliderContainer {
     height: 100%;
     width: 100%;
-    width: calc(100% - 1px);
 }
 
 .VerticalSliderContainer {
     margin: 0px;
     position: sticky;
-    padding: 10px 0px 10px 16px;
+    padding: 7px 14px;
     top: 42px;
 }
 
 @media screen and (orientation:portrait) {
     .SliderContainer {
-        padding: 10px 0 10px 8px;
+        padding: 6px 12px;
     }
 }
 
@@ -67,6 +66,11 @@
     .Slider {
         height: 125px;
     }
+}
+
+.DraggableItem {
+    max-width: 92px !important;
+    max-height: 69px !important;
 }
 
 .Instructions {

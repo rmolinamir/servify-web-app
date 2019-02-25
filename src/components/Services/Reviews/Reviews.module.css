@@ -1,12 +1,23 @@
 .Wrapper {
+    display: flex;
+    flex-flow: column;
     position: relative;
     width: 90%;
-    margin: 36px auto 0;
+    margin: 18px auto;
 }
 
 .Container {
     display: flex;
     flex-direction: row;
+    margin-top: 19px;
+}
+
+.Rate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #484848;
+    user-select: none;
 }
 
 @media (max-width: 580px) {
@@ -17,4 +28,70 @@
     .Container {
         flex-direction: column !important;
     }
+}
+
+.Button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #686868;
+    text-transform: uppercase;
+    font-size: 16px;
+    line-height: 1;
+    padding: 14px 22px;
+    transition: all .3s;
+    text-decoration: none;
+    margin-bottom: 19px;
+}
+
+.Form {
+    padding-right: 21px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.Well {
+    vertical-align: middle;
+    border-left: 2px solid #686868;
+    margin: 2px 0;
+    margin-top: 16px;
+    padding-left: 24px;
+    border-radius: 4px;
+    position: relative;
+    height: 500px;
+    max-height: 100%;
+    transition: height ease-out 500ms;
+}
+
+.Score {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+}
+
+.Score sub {
+    user-select: none;
+    margin-top: 3px;
+    margin-left: 6px;
+}
+
+.Score h4 {
+    color: #989898;
+}
+
+.Submit {
+    height: 48px;
+    margin: 12px 0;
+}
+
+.Tooltip {
+    position: absolute;
+    top: 0;
+    left: 106px;
+}
+
+.Tooltip svg {
+    width: 15px;
+    height: 15px;
 }

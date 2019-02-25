@@ -1,121 +1,107 @@
-import React, { Component } from 'react';
+import React from 'react';
+// Worker functions
+import defaultImage from '../../../../../shared/defaultServiceImage';
+import { setImagesArray } from '../../../../../shared/imagesHandler';
 // CSS
 import classes from '../../../../Services/ServicesId/ServicesId.module.css';
 // JSX
-import ReactResizeDetector from 'react-resize-detector';
 import Title from '../../../../../components/Services/Title/Title';
 import Gallery from '../../../../../components/Services/Gallery/Gallery';
-import Reviews from '../../../../../components/Services/Reviews/Reviews';
 import InfoPoint from '../../../../../components/Services/InfoPoint/InfoPoint';
 import InfoSection from '../../../../../components/Services/InfoSection/InfoSection';
-import SocialButtons from '../../../../../components/Services/SocialButtons/SocialButtons';
 import PhotosCarousel from '../../../../../components/UI/PhotosCarousel/PhotosCarousel';
 import Map from '../../../../../components/UI/Map/Map';
 import Separator from '../../../../../components/UI/Separator/Separator';
-import SVG from '../../../../../components/SVG/SVG';
 
-class Preview extends Component {
-    constructor (props) {
-        super(props);
-        this.myGallery = React.createRef();
-    }
-
-    state = {
-        imageSizes: {
-            width: null,
-            height: null
-        }
-    }
-
-    setGalleryDimensions = () => {
-        this.setState(() => {
-            return {
-                imageSizes: {
-                    width: this.myGallery.current.offsetWidth,
-                    height: this.myGallery.current.offsetWidth/(4/3)
-                }
-            }
-        });
-    }
-
-    componentDidMount() {
-        window.scrollTo(0,0);
-    }
-
-    render() {
-        return (
-            <>
-                <div className={classes.Container}>
-                    <Gallery reference={this.myGallery}>
-                        <ReactResizeDetector handleWidth handleHeight onResize={this.setGalleryDimensions} />
+const preview = (props) => {
+    if (!props.service) { return null; } // Preventing error crashing
+    return (
+        <>
+            <div className={classes.Container}>
+                <div className={classes.Gallery}>
+                    <Gallery>
                         <PhotosCarousel
-                            fadeTimeout={0}
-                            dimensions={this.state.imageSizes}
-                            images={this.props.images} />
+                            // Null pointers handler.
+                            images={
+                                props.imagesInfo ? 
+                                    props.images.length > 0 ? 
+                                        setImagesArray(props.images) : 
+                                        [defaultImage(props.service.category ? props.service.category.replace(' ', '_') : null)]
+                                    : [defaultImage(props.service.category ? props.service.category.replace(' ', '_') : null)]
+                                } />
                     </Gallery>
-                    <div className={classes.Description}>
-                        <div className={classes.Header}>
-                            <div className={classes.CategoryContainer}>
-                                <small className={classes.Category}>{this.props.category}</small>
-                            </div>
-                            <Title>
-                                {this.props.title ?
-                                        this.props.title
-                                        : <span className={classes.Error}>Service title is missing.</span>}
-                            </Title>
+                </div>
+                <div className={classes.Description}>
+                    <div className={classes.Header}>
+                        <div className={classes.CategoryContainer}>
+                            <small className={classes.Category}>{props.service.category}</small>
                         </div>
-                        <SocialButtons />
-                        <InfoPoint symbol={<SVG svg='location-pin' />} 
-                            location={
-                                this.props.infoPoints.state ? 
-                                    this.props.infoPoints.state 
-                                    : <span className={classes.Error}>State can't be empty.</span>} />
-                        {this.props.infoPoints.website ? 
-                            <InfoPoint symbol={<SVG svg='location-pin' />} website={this.props.infoPoints.website}/> 
-                            : null}
-                        {this.props.infoPoints.languages ? 
-                            <InfoPoint symbol={<SVG svg='chat' />} info={this.props.infoPoints.languages}/> 
-                            : null}
-                        <Separator />
-                        {Object.values(this.props.infoSections).map( (section, index) => {
-                            return (
-                                <>
-                                    <InfoSection
-                                        key={index}
-                                        title={section.title}
-                                        contact={section.contact}
-                                        header={section.header}>
-                                        <div>
-                                            <p>
-                                                {section.info ?
-                                                    section.info
-                                                    : <span className={classes.Error}>Please provide the necessary information.</span>}
-                                            </p>
-                                        </div>
-                                    </InfoSection>
-                                    <Separator />
-                                </>
-                            );
-                        })}
+                        <Title>
+                            {props.title ?
+                                props.title
+                                : <span className={classes.Error}>Service title is missing.</span>}
+                        </Title>
                     </div>
+                    <InfoPoint 
+                        location={
+                            props.infoPoints.state ? 
+                                props.infoPoints.state 
+                                : <span className={classes.Error}>State can't be empty.</span>} />
+                    <InfoPoint 
+                            logistic={
+                                props.logistic ? 
+                                    props.logistic
+                                    : <span className={classes.Error}>Must specify logistic option.</span>} />
+                    {props.infoPoints.website ? <InfoPoint website={props.infoPoints.website}/> : null}
+                    {/* {props.infoPoints.languages ? 
+                        <InfoPoint symbol={<SVG svg='chat' />} info={props.infoPoints.languages}/> 
+                        : null} */}
+                    <Separator />
+                    <InfoSection
+                        title={props.infoSections.service.title}
+                        contact={props.infoSections.service.contact}
+                        header={props.infoSections.service.header}>
+                        <div>
+                            <p>
+                                {props.infoSections.service.info ?
+                                    props.infoSections.service.info
+                                    : <span className={classes.Error}>Please provide the necessary information.</span>}
+                            </p>
+                        </div>
+                    </InfoSection>
+                    {props.infoSections.provider.title || props.infoSections.provider.info ? 
+                        <InfoSection
+                            title={props.infoSections.provider.title}
+                            contact={props.infoSections.provider.contact}
+                            header={props.infoSections.provider.header}>
+                        <div>
+                            <p>
+                                {props.infoSections.provider.info ?
+                                    props.infoSections.provider.info
+                                    : <span className={classes.Error}>Please provide the necessary information.</span>}
+                            </p>
+                        </div>
+                    </InfoSection>
+                    : null}
+                    <Separator />
                 </div>
-                <div className={classes.MapContainer}>
-                    <Title>Service Address</Title>
+            </div>
+            <div className={classes.MapContainer}>
+                <Title>Service Location</Title>
+                {/* Only render if there is a physical location */}
+                {props.logistic !== 'delivery' ? 
                     <div className={classes.Description}>
-                        <InfoPoint symbol={<SVG svg='location-pin' />} 
-                                location={
-                                    this.props.address ? 
-                                        this.props.address 
-                                        : <span className={classes.Error}>Address can't be empty.</span>} 
-                        />
+                        <InfoPoint location={
+                            props.physicalLocation ? 
+                                    props.physicalLocation 
+                                    : <span className={classes.Error}>Address can't be empty.</span>}/>
                     </div>
-                    <Map className={classes.MapWrapper} map={this.props.map} />
-                </div>
-                <Separator />
-                <Reviews rating={this.props.rating} />
-            </>
-        );
-    }
+                    : null}
+                <Map circle={props.isDelivery ? true : false} className={classes.MapWrapper} map={props.map} />
+            </div>
+            <Separator />
+        </>
+    );
 }
 
-export default Preview;
+export default preview;

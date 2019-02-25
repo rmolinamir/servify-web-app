@@ -1,26 +1,29 @@
 import React from 'react';
 // CSS
 import classes from './Service.module.css';
+// Worker functions
+import { setImagesArray } from '../../../shared/imagesHandler';
+import defaultImgUrl from '../../../shared/defaultServiceImage';
 // JSX
 import { Link } from 'react-router-dom';
 import Rating from '../../../components/UI/Rating/Rating';
 import ImageFadeIn from '../../UI/ImageFadeIn/ImageFadeIn';
 
-const defaultImgUrl = 'https://storage.googleapis.com/servify-716c6.appspot.com/service_images%2F2019-01-12T06%3A37%3A57.360Zdefault-service-image.png?GoogleAccessId=firebase-adminsdk-a3e7c%40servify-716c6.iam.gserviceaccount.com&Expires=95623372800&Signature=VK1PwozcAgxOAYJH6%2FBnDqnSFavcUu0%2FbbWbOgowvx629SQ860EcW4l6YQpE08cu8q1XrsQW0KsLp%2BxAAOoHOomPVmZfGapqZlb821nyjFlN5aMdgTVPbTrWAScfVs3H4%2BJZLOqAZatqPw96blxY%2FIwrbu4dj0q6elQ%2FzRRqG5wLO5fkUvOTG18xF8DfZkTViHxaNiqD%2FPQS69sPRcMnF69%2BQGjC2ZecNbMeatufctbb95%2FL7%2FSJaIgO98HyZ8WJ9ZFxJbl7bqkHV3ptAMP5c8OIfCHeLqfKVtjoW6AmrnXh3LQXCY8GUOTbB09XwzUjggA6TpUuHblEd34p452%2BaA%3D%3D';
-
 const service = (props) => {
+    if (!props.href) { return null; }
     const totalStarsRatingAmount = props.totalAmount ? props.totalAmount : 5;
+    const image = props.image ? setImagesArray(props.image) : [];
     return (
         // Total rating amount, defaults to 5
         <div className={classes.Service}>
-            <Link draggable="false" to={props.href ? props.href : '/services/notfound'} className={classes.Wrapper} target="_blank">
+            <Link draggable="false" to={['/services', props.href].join('/')} className={classes.Wrapper}>
                 <div className={classes.ThumbnailWrapper}>
                     <div className={classes.ThumbnailContainer}>
-                        <ImageFadeIn draggable="false" className={classes.Thumbnail} src={props.image ? props.image : defaultImgUrl} />
+                        <ImageFadeIn draggable="false" className={classes.Thumbnail} src={image.length ? image[0] : defaultImgUrl(props.header ? props.header.replace(' ', '_') : null)} />
                     </div>
                 </div>
             </Link>
-            <Link draggable="false" to={props.href ? props.href : '/services/notfound'} className={classes.Details} target="_blank">
+            <Link draggable="false" to={['/services', props.href].join('/')} className={classes.Details}>
                 <div>
                     <div className={classes.Header}>
                         <span>{props.header}</span>
@@ -35,8 +38,10 @@ const service = (props) => {
                             {/* Price rating for easier interpretation */}
                             {props.title ? 
                                 <span className={classes.RatingsAvg}>Price</span>
-                            : null}
-                            <Rating type='price' rating={props.priceRating} />
+                                : null}
+                            {props.ratingAmount ?
+                                <Rating type='price' rating={props.priceRating} />
+                                : null}
                         </span>
                     </div>
                 : null}
@@ -45,18 +50,21 @@ const service = (props) => {
                         {/* Average Rating */}
                         <span role="img" className={classes.RatingsWrapper}>
                             {/* Rating Average times the total amount of stars for easier interpretation */}
-                            {props.title ? 
+                            {props.title && props.ratingAmount ? 
                                 <span className={classes.RatingsAvg}>{(props.ratingAvg*totalStarsRatingAmount).toFixed(2)}</span>
-                            : null}
-                            <Rating type='stars' rating={props.ratingAvg} amount={totalStarsRatingAmount}/>
+                                : null}
+                            {props.ratingAmount ?
+                                <Rating type='stars' rating={props.ratingAvg} amount={totalStarsRatingAmount}/>
+                                : null}
                         </span>
                         {/* Total amount of Ratings */}
                         {props.title ? 
                             <span className={classes.RatingsAmount}>
                                 <span className={classes.Amount}>
-                                    {props.ratingAmount}
                                     {/* Dynamic string depending if 1 rating or more */}
-                                    &nbsp;total rating{props.ratingAmount > 0 ? 's' : null}</span> 
+                                    {!props.ratingAmount ?
+                                        'No reviews yet' 
+                                        : <span>{props.ratingAmount} review{props.ratingAmount > 1 ? 's' : null}</span> }</span> 
                             </span>
                         : null}
                     </div>

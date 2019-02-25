@@ -1,34 +1,17 @@
 import React from 'react';
-// CSS
-import classes from './ServicesArray.module.css';
 // JSX
+import LoadingBounce from '../../../../../components/UI/LoadingBounce/LoadingBounce';
 import Carousel from '../../../../../components/UI/Carousel/Carousel';
 import Service from '../../../../../components/Services/Service/Service';
-import Featured from '../../../../../components/Services/Featured/Featured';
 
 const services = (props) => {
-    // TODO remove placeholders
-    const placeholders = [];
-    for (let i = 0; i < 12; i++) {
-        placeholders.push(
-            <Service
-                key={i}
-                priceRating={1}
-                ratingAvg={1}
-                image={'/'} />
-        );
-    }
-    const loadingServicesCarousel = (
-        <div className={classes.Container}>
-            {placeholders}
-        </div>
-    );
-    let topServicesByCategories = loadingServicesCarousel,
+    let topServicesByCategories = null,
         topServices = null,
         nearServices = null;
     if (props.services.byCategories) { 
         topServicesByCategories = (
             Object.entries(props.services.byCategories).map( (category, index) => {
+                if (!category[1].length) { return null; }
                 return (
                     <div key={index}>
                         <h1>{category[0]} 
@@ -43,10 +26,11 @@ const services = (props) => {
                                         key={[index, service.title].join('_')}
                                         header={service.category.replace("_", " ")}
                                         title={service.title}
-                                        priceRating='0.05'
+                                        href={service.id}
+                                        priceRating={service.price/4}
                                         ratingAvg={service.rating/5}
                                         ratingAmount={service.ratingCount}
-                                        image={service.image}/>
+                                        image={service.imagesInfo}/>
                                 );
                             })}
                         </Carousel>
@@ -56,6 +40,7 @@ const services = (props) => {
         );
     }
     if (props.services.topServices) {
+        if (!props.services.topServices.length) { return topServices = null; }
         topServices = (
             <div>
                 <h1>Top-rated services</h1>
@@ -66,10 +51,11 @@ const services = (props) => {
                                 key={index}
                                 header={service.category.replace("_", " ")}
                                 title={service.title}
-                                priceRating='0.05'
+                                href={service.id}
+                                priceRating={service.price/4}
                                 ratingAvg={service.rating/5}
                                 ratingAmount={service.ratingCount}
-                                image={service.image}/>
+                                image={service.imagesInfo}/>
                         );
                     })}
                 </Carousel>
@@ -77,9 +63,10 @@ const services = (props) => {
         );
     }
     if (props.services.nearServices) {
+        if (!props.services.topServices.length) { return nearServices = null; }
         nearServices = (
             <div>
-                <h1>Near services
+                <h1>Services
                     {props.city && props.state ?
                         ` in ${props.city}, ${props.state}` : 
                         ' near you'}
@@ -91,10 +78,11 @@ const services = (props) => {
                                 key={index}
                                 header={service.category.replace("_", " ")}
                                 title={service.title}
-                                priceRating='0.05'
+                                href={service.id}
+                                priceRating={service.price/4}
                                 ratingAvg={service.rating/5}
                                 ratingAmount={service.ratingCount}
-                                image={service.image}/>
+                                image={service.imagesInfo}/>
                         );
                     })}
                 </Carousel>
@@ -105,17 +93,13 @@ const services = (props) => {
         props.services.byCategories ? 
         (
             <>
+                {nearServices}
                 {topServicesByCategories}
                 {topServices}
-                {nearServices}
             </>
         )
         : (
-            <>
-                {topServicesByCategories}
-                {topServicesByCategories}
-                {topServicesByCategories}
-            </>
+            <LoadingBounce />
         )
     );
 }

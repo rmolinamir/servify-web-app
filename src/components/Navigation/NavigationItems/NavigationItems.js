@@ -90,6 +90,9 @@ const renderNavigationItems = (props) => {
 						null : 
 						<>
 							<div className={classes.Spacing} />
+							<NavigationItem className={props.className} {...props} link="/services">
+								Services
+							</NavigationItem>
 							<NavigationItem className={props.className} {...props} link="/publish/overview" >
 								Publish
 							</NavigationItem>
@@ -101,7 +104,27 @@ const renderNavigationItems = (props) => {
 					}
 				</>
 			);
-		
+		case 'EditPublicationNavbar':
+			return (
+				<>
+					{props.width < 1121 ? 
+						null : 
+						<>
+							<div className={classes.Spacing} />
+							<NavigationItem className={props.className} {...props} color="white" link="/services">
+								Services
+							</NavigationItem>
+							<NavigationItem className={props.className} {...props} color="white" link="/publish/overview" >
+								Publish
+							</NavigationItem>
+							<NavigationItem className={props.className} {...props} color="white" link="/help" >
+								Help
+							</NavigationItem>
+							<NavAuthButtons {...props} color="white"/> 
+						</>
+					}
+				</>
+			);
 		case 'SupportNavbar':
 			return (
 				<>
@@ -129,7 +152,7 @@ const renderNavigationItems = (props) => {
 					</NavLink>
 					<Separator />
 					<NavigationItem {...props} link="/publish/overview" color="white">
-						Publishing a service
+						Publish a service
 					</NavigationItem>
 					<NavigationItem {...props} link="/services" color="white">
 						Services

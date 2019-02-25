@@ -16,9 +16,7 @@ const NavbarContainer = (props) => {
 				<NagivationItems
 					width={props.width}
 					navbarType={props.navbarType} 
-					isNavbarTransparent={props.isNavbarTransparent} 
-					isAuthenticated={props.isAuthenticated}
-					toggleAuthModal={props.toggleAuthModal} />
+					isNavbarTransparent={props.isNavbarTransparent} />
 			</nav>
 			{props.width < 1121 ? 
 			<>
@@ -30,10 +28,8 @@ const NavbarContainer = (props) => {
 					drawerClass={classes.MobileOnly}
 					isOpen={props.bIsDrawerOpen}
 					onClick={props.toggleMobileDrawer}
-					isAuthenticated={props.isAuthenticated}
 					// NavItems props
-					isNavbarTransparent={props.navbarTransparent} 
-					toggleAuthModal={props.toggleAuthModal} />
+					isNavbarTransparent={props.navbarTransparent} />
 			</> 
 			: null}
 			
@@ -80,7 +76,6 @@ class Navbar extends PureComponent {
 			top: 0,
 			left: 0,
 			behavior: 'smooth',
-			bShowAuthModal: false
 		});
 	};
 
@@ -119,12 +114,6 @@ class Navbar extends PureComponent {
 			});
 		}
 	};
-
-	toggleAuthModal = () => {
-		this.setState( (prevState) => {
-			return { bShowAuthModal: !prevState.bShowAuthModal };
-		});
-	}
 
 	handleResize = () => {
 		this.setState({ width: window.innerWidth });
@@ -167,8 +156,6 @@ class Navbar extends PureComponent {
 					className: classes.LandingNavbar,
 					// passing reference from constructor
 					navbarType: 'LandingNavbar', // pass navbarType prop to select respective navigation items
-					// Toggle Auth Modal
-					toggleAuthModal: this.props.toggleAuthModal,
 					// Scroll Tracking Functionality if dependant on scroll then pass 'this.trackScrolling'
 					onScroll: () => { return }, // No functionality
 					// Passing Is Navbar Transparent functionality, if dependant on scroll then pass 'this.state.navbarTransparent'
@@ -182,7 +169,15 @@ class Navbar extends PureComponent {
 				settings = {
 					className: classes.Navbar,
 					navbarType: 'SearchNavbar', // pass navbarType prop to select respective navigation items
-					toggleAuthModal: this.props.toggleAuthModal, // Toggle Auth Modal
+					toggleMobileDrawer: this.toggleMobileDrawer,
+					isNavbarTransparent: false,
+					isDrawerTransparent: false
+				}
+				break;
+			case this.props.location.pathname.includes('/users/publications/edit'): // Renders navbar for every address that has /services as root
+				settings = {
+					className: classes.EditPublicationNavbar,
+					navbarType: 'EditPublicationNavbar', // pass navbarType prop to select respective navigation items
 					toggleMobileDrawer: this.toggleMobileDrawer,
 					isNavbarTransparent: false,
 					isDrawerTransparent: false
@@ -192,7 +187,6 @@ class Navbar extends PureComponent {
 				settings = {
 					className: classes.Navbar,
 					navbarType: 'PublishOverviewNavbar', // pass navbarType prop to select respective navigation items
-					toggleAuthModal: this.props.toggleAuthModal, // Toggle Auth Modal
 					toggleMobileDrawer: this.toggleMobileDrawer,
 					isNavbarTransparent: false,
 					isDrawerTransparent: false
@@ -202,7 +196,6 @@ class Navbar extends PureComponent {
 				settings = {
 					className: classes.PublishNavbar,
 					navbarType: 'PublishNavbar', // pass navbarType prop to select respective navigation items
-					toggleAuthModal: this.props.toggleAuthModal,
 					toggleMobileDrawer: this.toggleMobileDrawer,
 					isNavbarTransparent: false,
 					isDrawerTransparent: true
@@ -212,7 +205,6 @@ class Navbar extends PureComponent {
 				settings = {
 					className: classes.SupportNavbar,
 					navbarType: 'SupportNavbar', // pass navbarType prop to select respective navigation items
-					toggleAuthModal: this.props.toggleAuthModal,
 					toggleMobileDrawer: this.toggleMobileDrawer,
 					isNavbarTransparent: false,
 					isDrawerTransparent: true
@@ -223,7 +215,6 @@ class Navbar extends PureComponent {
 				settings = {
 					className: classes.Navbar,
 					navbarType: 'SearchNavbar', // pass navbarType prop to select respective navigation items
-					toggleAuthModal: this.props.toggleAuthModal, // Toggle Auth Modal
 					toggleMobileDrawer: this.toggleMobileDrawer,
 					isNavbarTransparent: false,
 					isDrawerTransparent: false
@@ -244,8 +235,7 @@ class Navbar extends PureComponent {
 		return (
 			<header className={navbarClasses.join(' ')} ref={this.myNavbar}>
 				<NavbarContainer
-					isMobile={this.props.isMobile} 
-					isAuthenticated={this.props.isAuthenticated} 
+					isMobile={this.props.isMobile}  
 					{...this.state} />
 				{/* ScrollToTopButton after scrolling */}
 				{this.state.showScrollToTop ? (
@@ -258,13 +248,8 @@ class Navbar extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		isMobile: state.mobileReducer.isMobile,
-		isAuthenticated: state.authReducer.userId !== null
+		isMobile: state.mobileReducer.isMobile
 	};
 };
 
-export default withRouter(
-	connect(
-		mapStateToProps
-	)(Navbar)
-);
+export default withRouter(connect(mapStateToProps)(Navbar));

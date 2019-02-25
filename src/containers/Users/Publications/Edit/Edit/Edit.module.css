@@ -4,6 +4,30 @@
     margin-top: 40px;
 }
 
+.GalleryWrapper {
+    align-items: center;
+    width: calc(42.2222% - 5.333333333333333px);
+    flex: none;
+    padding-right: 36px;
+    display: block;
+    padding: 0px;
+    max-width: 844px;
+    animation: fade-in ease 0.5s;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    66% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
 @media (max-width: 1080px) {
     .ServiceContainer {
         flex-direction: column;
@@ -28,16 +52,6 @@
     .ServicesWrapper {
         padding-left: 12px !important;
     }
-}
-
-.GalleryWrapper {
-    align-items: center;
-    width: calc(42.2222% - 5.333333333333333px);
-    flex: none;
-    /* padding-right: 24px; */
-    padding-right: 36px;
-    display: block;
-    padding: 0px;
 }
 
 .GalleryContainer {
@@ -102,7 +116,8 @@
     flex: auto;
 }
 
-.MapContainer {
+.MapContainer,
+.InputImageWrapper {
     display: flex;
     position: relative;
     flex-flow: column;
@@ -114,7 +129,38 @@
 }
 
 @media (max-width: 744px) {
-    .MapContainer {
+    .MapContainer,
+    .InputImageWrapper {
         margin: 0px auto 18px;
     }
+}
+
+.InputImageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: row;
+}
+
+.InputImageContainer > div {
+    margin: 0 1px;
+    border-radius: 0;
+    flex-basis: 100%;
+}
+
+.Warning {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}
+
+.Warning strong {
+    margin-right: 1ch;
 }

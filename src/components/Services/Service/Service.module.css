@@ -1,10 +1,11 @@
 .Service {
     user-select: none;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
     flex-flow: column;
     width: 100%;
+    min-width: 120px;
     height: 100%;
     padding-top: 8px;
     padding-bottom: 12px;
@@ -27,8 +28,6 @@
 .ThumbnailWrapper {
     user-select: none;
     padding-top: 66.6667%;
-    /* TODO Add placeholder image */
-    /* background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAADCAIAAADUVFKvAAAAOUlEQ…gwY19rvrmFAy+P0OPHT6o6OxgXTK21tPHatnUrGwvT5y+fAcmrFId61Xr1AAAAAElFTkSuQmCC); */
     background-size: 100% 100%;
     /* Google Chrome */
     contain: strict;
@@ -53,6 +52,7 @@
     width: 100%;
     height: 100%;
     position: absolute;
+    object-fit: cover;
     background-color: rgb(229, 229, 229);
     background-size: cover;
     background-position: 50% 50%;
@@ -68,7 +68,7 @@
     display: block;
     color: rgb(72, 72, 72);
     font-weight: inherit;
-    max-width: 100%;
+    width: 100%;
 }
 
 .Header {
@@ -112,6 +112,10 @@
 .RatingsWrapper {
     display: flex;
     align-items: center;
+}
+
+.RatingsWrapper svg {
+    width: 9px;
 }
 
 .RatingsAvg {

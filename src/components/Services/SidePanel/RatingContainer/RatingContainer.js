@@ -7,13 +7,13 @@ import Rating from '../../../UI/Rating/Rating';
 export const RatingContainer = (props) => {
     const ratingClasses = [classes.Rating];
     switch (true) {
-        case props.rating >= 0.75:
+        case props.rating > 0.75:
             ratingClasses.push(classes.RatingActiveFour);
             break;
-        case props.rating >= 0.5:
+        case props.rating > 0.5:
             ratingClasses.push(classes.RatingActiveThree);
             break;
-        case props.rating >= 0.25:
+        case props.rating > 0.25:
             ratingClasses.push(classes.RatingActiveTwo);
             break;
         default:
@@ -64,7 +64,7 @@ export const ClosedRatingContainer = (props) => {
                         fontSize: '16px',
                         fontWeight: '600',
                         height: '13px',
-                        margin: '0 5px 0 10px'
+                        margin: '0 5px'
                     }}>-</span> {/** Separator */}
                 <Rating 
                     rating={props.rating} 

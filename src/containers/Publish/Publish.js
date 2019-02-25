@@ -8,15 +8,18 @@ import classes from './Publish.module.css';
 // JSX
 import Button from '../../components/UI/Button/Button';
 import { Slider, Slide } from '../../components/UI/Slider';
-import StepOne from './Steps/StepOne/StepOne';
-import StepTwo from './Steps/StepTwo/StepTwo';
-import StepThree from './Steps/StepThree/StepThree';
-import StepFour from './Steps/StepFour/StepFour';
-import StepFive from './Steps/StepFive/StepFive';
+import StepOne from './Steps/1/StepOne';
+import StepTwo from './Steps/2/StepTwo';
+import StepThree from './Steps/3/StepThree';
+import StepFour from './Steps/4/StepFour';
+import StepFive from './Steps/5/StepFive';
+import StepSix from './Steps/6/StepSix';
+import StepSeven from './Steps/7/StepSeven';
+import StepEight from './Steps/8/StepEight';
 
 const categoriesDatalist = categories.map( (category) => {
     return {
-        value: category.title,
+        value: category.dbReference,
         displayValue: category.title,
     };
 });
@@ -28,13 +31,15 @@ class Publish extends Component {
             1: {
                 data: {
                     category: null
+                    // May have subcategory.
                 },
                 formIsValid: false
             },
             2: {
                 data: {
-                    companyName: null,
                     serviceTitle: null,
+                    companyName: null,
+                    companyWebsite: null,
                     contactPhone: null,
                     contactEmail: null
                 },
@@ -42,12 +47,37 @@ class Publish extends Component {
             },
             3: {
                 data: {
-                    providerDescription: null,
-                    serviceDescription: null
+                    serviceDescription: null,
+                    providerDescription: null
                 },
                 formIsValid: false
             },
             4: {
+                data: {
+                    imageFiles: null,
+                },
+                formIsValid: false
+            },
+            5: {
+                data: {
+                    option: {
+                        bool: null,
+                        display: null
+                    }
+                },
+                formIsValid: false
+            },
+            6: {
+                data: {
+                    street: null,
+                    name: null,
+                    city: null,
+                    region: null,
+                    postal: null
+                },
+                formIsValid: false
+            },
+            7: {
                 data: {
                     address: null,
                     coordinates: null
@@ -78,9 +108,10 @@ class Publish extends Component {
     }
 
     onPrevHandler = () => {
+        window.scrollTo(0,0); // Scrolls to the top before sliding
         setTimeout( () => { // Delay to wait for slider transition
             this.setState( (prevState) => {
-                const step = Clamp(prevState.step - 1, 1, 4);
+                const step = Clamp(prevState.step -1, 1, 9);
                 return {
                     step: step,
                     steps: {
@@ -88,18 +119,19 @@ class Publish extends Component {
                     }
                 }
             });
-        }, 100);
+        }, 250);
     }
 
     onNextHandler = () => {
+        window.scrollTo(0,0); // Scrolls to the top before sliding
         setTimeout( () => { // Delay to wait for slider transition
             this.setState( (prevState) => {
-                const step = Clamp(prevState.step + 1, 1, 4);
+                const step = Clamp(prevState.step + 1, 1, Object.keys(this.state.steps).length + 1);
                 return {
                     step: step
                 }
             });
-        }, 100);
+        }, 50);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -109,8 +141,8 @@ class Publish extends Component {
     render() {
         const activeStep = this.state.step;
         const buttons = {
-            prev: this.state.step > 1 ? <Button  style={{marginLeft: 0}} className={classes.Button} type='primary'>Go back</Button> : <></>,
-            next: <Button disabled={!this.state.steps[activeStep].formIsValid} style={this.state.step > 1 ? null : {marginLeft: 0}} className={classes.Button} type='primary'>Next</Button>,
+            prev: this.state.step > 1 ? <Button tabIndex='-1' style={{marginLeft: 0}} className={classes.Button} type='primary'>Go back</Button> : <></>,
+            next: this.state.step !== 8 ? <Button tabIndex='-1' disabled={!this.state.steps[activeStep].formIsValid} style={this.state.step > 1 ? null : {marginLeft: 0}} className={classes.Button} type='primary'>Next</Button> : <></>,
             onClick: {
                 prev: this.onPrevHandler,
                 next: this.onNextHandler
@@ -119,21 +151,47 @@ class Publish extends Component {
         }
         return (
             <div className={classes.Wrapper}>
-                <Slider fadeIn disableNav buttons={buttons}>
+                <Slider progressBar fadeIn disableNav buttons={buttons}>
+                    {/* Category */}
                     <Slide>
-                        <StepOne activeStep={activeStep} stepKey={1} updateData={this.updateData} checkValidity={checkValidity} categoriesDatalist={categoriesDatalist} />
+                        <StepOne data={this.state.steps['1'].data} 
+                            activeStep={activeStep} stepKey={1} updateData={this.updateData} checkValidity={checkValidity} categoriesDatalist={categoriesDatalist} />
                     </Slide>
+                    {/* Basic Information */}
                     <Slide>
                         <StepTwo activeStep={activeStep} stepKey={2} updateData={this.updateData} checkValidity={checkValidity} categoriesDatalist={categoriesDatalist} />
                     </Slide>
+                    {/* Details */}
                     <Slide>
                         <StepThree activeStep={activeStep} stepKey={3} updateData={this.updateData} checkValidity={checkValidity} categoriesDatalist={categoriesDatalist} />
                     </Slide>
+                    {/* Images (Optional) */}
                     <Slide>
                         <StepFour activeStep={activeStep} stepKey={4} updateData={this.updateData} checkValidity={checkValidity} categoriesDatalist={categoriesDatalist} />
                     </Slide>
+                    {/* Logistic */}
                     <Slide>
                         <StepFive activeStep={activeStep} stepKey={5} updateData={this.updateData} checkValidity={checkValidity} categoriesDatalist={categoriesDatalist} />
+                    </Slide>
+                    {/* Service Address */}
+                    <Slide>
+                        <StepSix 
+                            bIsDelivery={this.state.steps['5'].data.option} 
+                            activeStep={activeStep} stepKey={6} updateData={this.updateData} checkValidity={checkValidity} categoriesDatalist={categoriesDatalist} />
+                    </Slide>
+                    {/* The Map */}
+                    <Slide>
+                        <StepSeven 
+                            bIsDelivery={this.state.steps['5'].data.option} 
+                            data={this.state.steps['6'].data} 
+                            activeStep={activeStep} stepKey={7} updateData={this.updateData} checkValidity={checkValidity} categoriesDatalist={categoriesDatalist} />
+                    </Slide>
+                    {/* Posting service data happens on step 8 */}
+                    <Slide>
+                        <StepEight 
+                            data={this.state.steps} 
+                            dataIsValid={this.state.dataIsValid} 
+                            activeStep={activeStep} stepKey={8} updateData={this.updateData} checkValidity={checkValidity} categoriesDatalist={categoriesDatalist} />
                     </Slide>
                 </Slider>
             </div>

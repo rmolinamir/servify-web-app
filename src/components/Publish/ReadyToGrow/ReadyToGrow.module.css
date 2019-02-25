@@ -11,8 +11,9 @@
     height: 500px;
     width: 100%;
     box-sizing: border-box;
-    background-color: #4893a8;
+    background-color: #1b2d37;
 }
+
 
 .Background {
     vertical-align: middle;
@@ -30,8 +31,9 @@
     cursor: pointer;
     position: absolute;
     width: 100%;
-    height: calc((100% - 20px) - 0.4em);
+    height: 100%;
     box-sizing: border-box;
+    background-color: rgba(0,0,0,.16);
 }
 
 .BannerContainer {

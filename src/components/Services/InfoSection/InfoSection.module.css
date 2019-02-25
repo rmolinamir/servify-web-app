@@ -20,7 +20,7 @@
     font-size: 18px;
     line-height: 30px;
     letter-spacing: normal;
-    color: #484848;
+    color: #ff7043;
 }
 
 .InfoContainer {
@@ -43,7 +43,7 @@
     line-height: 26px;
     letter-spacing: normal;
     color: #484848;
-    font-weight: normal;
+    font-weight: normal !important;
 }
 
 .LogoWrapper {
@@ -89,25 +89,6 @@
     line-height: 22px;
     letter-spacing: normal;
     color: #484848;
-}
-
-.Contact {
-    color: rgb(255, 112, 67);
-    font: inherit;
-    text-decoration: none;
-    appearance: none;
-    background: transparent;
-    border: 0px;
-    cursor: pointer;
-    margin: 0px;
-    padding: 0px;
-    user-select: auto;
-    text-align: center;
-}
-
-.Contact:hover {
-    text-decoration: underline;
-    color: var(--color-text-link-hover, rgb(255, 112, 67));
 }
 
 @media (max-width: 744px) {

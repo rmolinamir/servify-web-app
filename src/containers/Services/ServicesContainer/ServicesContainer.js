@@ -1,5 +1,4 @@
-import React, { Component } from 'react'
-import axios from 'axios';
+import React from 'react'
 import categories from '../../../shared/categories';
 // redux-sagas
 import { connect } from 'react-redux';
@@ -16,55 +15,28 @@ categories.map( (category) => {
     return categoriesObj[category.title.replace(/[^a-zA-Z0-9]/g, '')] = false; // Parsing special characters from titles to allow only letters
 });
 
-class Services extends Component {
-    state = {
-        location: {
-            city: null,
-            state: null
-        }
-    }
-
-    savePosition = (position) => {
-        const city = position.data.city;
-        const state = position.data.region;
-        this.setState( () => {
-                return {
-                    location: {
-                        city,
-                        state
-                    }
-                }
-            }
-        );
-    }
-
-    componentDidMount () {
-        axios.get('http://ipinfo.io').then(
-            (response) => this.savePosition(response)
-        );
-    }
-
-    render () {
-        return (
-            <div className={classes.ServicesWrapper}>
-                <div className={classes.ServicesContainer}>
-                { this.props.bIsLoading ? 
-                    <LoadingBounce /> :   
-                    this.props.bIsDefault ? 
-                        <DefaultServices
-                            topCategories={this.props.topCategories}
-                            services={this.props.services}
-                            city={this.state.location.city} 
-                            state={this.state.location.state} /> :
-                        <FilteredServices /> }
-                </div>
+const services = (props) => {
+    return (
+        <div className={classes.ServicesWrapper}>
+            <div className={classes.ServicesContainer}>
+            { props.bIsLoading ? 
+                <LoadingBounce /> :   
+                props.bIsDefault ? 
+                    <DefaultServices
+                        priceFiter={props.priceFiter}
+                        topCategories={props.topCategories}
+                        services={props.services}
+                        city={props.locationData.city} 
+                        state={props.locationData.region} /> :
+                    <FilteredServices priceFiter={props.priceFiter} /> }
             </div>
-        )
-    }
+        </div>
+    );
 }
 
 const mapStateToProps = (state) => {
 	return {
+        locationData: state.usersReducer.locationData,
         bIsLoading: state.servicesReducer.bIsLoading,
         bIsDefault: state.servicesReducer.bIsDefault,
         services: state.servicesReducer.services,
@@ -72,4 +44,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps)(Services);
+export default connect(mapStateToProps)(services);

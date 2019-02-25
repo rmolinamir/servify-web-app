@@ -17,7 +17,7 @@ import Button from '../../../../components/UI/Button/Button';
 import Input from '../../../../components/UI/Input/Input';
 import Loading from '../../../../components/UI/LoadingDots/LoadingDots';
 
-class SignUpModal extends PureComponent {
+class SignUp extends PureComponent {
 
     state = {
         controls: {
@@ -91,7 +91,7 @@ class SignUpModal extends PureComponent {
                 valueType: 'password',
                 validation: {
                     required: true,
-                    minLength: 8
+                    minLength: 6
                 },
                 valid: false,
                 touched: false,
@@ -170,6 +170,12 @@ class SignUpModal extends PureComponent {
         });
     }
     
+    onSubmitHandler = (event) => {
+        event.preventDefault();
+        const displayName = [this.state.controls.firstName.value, this.state.controls.lastName.value].join(' ');
+        this.props.onSignUpHandler(this.state.controls.email.value, this.state.controls.password.value, this.state.bRememberMe, displayName);
+    }
+    
     setLoading = () => {
         this.setState({
             loading: false
@@ -193,7 +199,7 @@ class SignUpModal extends PureComponent {
     render() {
         const formElementsArray = Object.entries(this.state.controls);
         return (
-            <>  
+            <div className={classes.Container}>  
                 <Button clicked={() => this.props.onFacebookSignInHandler(this.state.bRememberMe)} 
                     type='facebook' blockButton={true}>Sign up with Facebook</Button>
                 <Button clicked={() => this.props.onGoogleSignInHandler(this.state.bRememberMe)} 
@@ -238,7 +244,7 @@ class SignUpModal extends PureComponent {
                     text="Already have a Servify account?"
                     switchText='Log in'
                     switchAuthModalHandler={() => this.props.switchAuthModalHandler('sign in')} />
-            </>
+            </div>
         );
     }
 };
@@ -251,11 +257,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSignUpHandler: (email, password, bRememberMe) => dispatch(authCreator.authSignUpInit(email, password, bRememberMe)),
-		onFacebookSignInHandler: (bRememberMe) => dispatch(authCreator.authFacebookSignInInit(bRememberMe)),
-		onGoogleSignInHandler: (bRememberMe) => dispatch(authCreator.authGoogleSignInInit(bRememberMe)),
+        onSignUpHandler: (email, password, bRememberMe, displayName) => dispatch(authCreator.authSignUpInit(email, password, bRememberMe, displayName)),
+		onFacebookSignInHandler: (bRememberMe) => dispatch(authCreator.authFacebook.signUpInit(bRememberMe)),
+		onGoogleSignInHandler: (bRememberMe) => dispatch(authCreator.authGoogle.signUpInit(bRememberMe)),
 		resetErrorMessage: () => dispatch(authActions.authResetErrorMessage())
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignUpModal);
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

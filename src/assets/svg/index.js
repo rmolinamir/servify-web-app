@@ -18,7 +18,16 @@ import Private from './private';
 import SingleImage from './single-image';
 import MultiImage from './multi-image';
 import Delete from './delete';
-
+import Website from './website';
+import DeliveryTruck from './delivery-truck';
+import QuestionMark from './question-mark';
+import Phone from './phone';
+import Envelope from './envelope';
+import SentEnvelope from './sent-envelope';
+import Flag from './flag';
+import Applestore from './applestore';
+import Playstore from './playstore';
+// TODO make SVG
 import BlackBorderlessLogo from '../images/servify-logos/blackborder-nobg';
 
 // TODO underline randomize colors
@@ -43,5 +52,14 @@ export {
     Private,
     SingleImage,
     MultiImage,
-    Delete
+    Delete,
+    Website,
+    DeliveryTruck,
+    QuestionMark,
+    Phone,
+    Envelope,
+    SentEnvelope,
+    Flag,
+    Applestore,
+    Playstore
 };
