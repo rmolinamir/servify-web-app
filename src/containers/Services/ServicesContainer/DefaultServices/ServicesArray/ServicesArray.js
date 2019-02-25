@@ -63,7 +63,7 @@ const services = (props) => {
         );
     }
     if (props.services.nearServices) {
-        if (!props.services.topServices.length) { return nearServices = null; }
+        if (!props.services.nearServices.length) { return nearServices = null; }
         nearServices = (
             <div>
                 <h1>Services
